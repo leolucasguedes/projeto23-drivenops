@@ -1,0 +1,23 @@
+on: [pull_request]
+name: Pull Request
+jobs:
+  PullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create back-end env file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          envkey_POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          envkey_POSTGRES_DB: ${{secrets.POSTGRES_DB_TEST}}
+          envkey_POSTGRES_URL: ${{secrets.POSTGRES_URL_TEST}}
+          envkey_DATABASE_URL: ${{secrets.DATABASE_URL_TEST}}
+          directory: back-end/
+          file_name: .env.test
+          fail_on_empty: true
+      - name: Run tests
+        run: docker-compose -f docker-compose_tests.yml run node_app_test npm run test
+      - name: Build
+        run: cd back-end && npm i && npm run build 
