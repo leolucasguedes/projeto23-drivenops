@@ -2,6 +2,7 @@ on:
   push: 
     branches: 
       - main
+
 name: Build and Deploy
 jobs: 
   build:
@@ -10,6 +11,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        
       - name: Create back-end env file
         uses: SpicyPizza/create-envfile@v1.3
         with:
